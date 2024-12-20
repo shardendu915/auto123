@@ -1,0 +1,67 @@
+package interviews;
+
+import java.time.Duration;
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.interactions.Actions;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+public class Task1FunctionalE2E {
+
+	public static void main(String[] args) throws InterruptedException {
+		WebDriverManager.edgedriver().setup();
+		WebDriver driver= new EdgeDriver();
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		driver.get("https://www.google.com/");
+		driver.manage().window().maximize();
+		
+		// Open Google and perform a search for ‘Best Washing Machine’
+		
+	WebElement	serchinput=driver.findElement(By.xpath("//textarea[@id='APjFqb']"));
+		serchinput.sendKeys("Best Washing Machine");
+		//serchinput.sendKeys(Keys.ENTER);
+		Actions  actions=new Actions(driver);
+		actions.sendKeys(serchinput,Keys.ENTER).build().perform();
+		
+		//2-Get all search results displayed and validate how many Amazon and 
+		//Flipkart  links there are available
+		
+		List <WebElement> all_links=driver.findElements(By.tagName("a"));
+		
+		System.out.println("total links          after serch = "+all_links.size());
+		
+		int amazone_count =0;
+		int flipkart_count =0;
+		
+		for(int i=1 ;i<all_links.size() ;i++)
+		{
+			String text=all_links.get(i).getText();
+			
+			if(text.contains("https://www.amazon.in"))
+			{
+				amazone_count ++;
+				
+			}
+			else if(text.contains("https://www.flipkart.com"))
+			{
+				flipkart_count ++;
+			}
+			
+		}
+		System.out.println("total amazone  links after serch = "+amazone_count);
+		System.out.println("total flipkart  links after serch = "+flipkart_count);
+		
+		
+	//close all window	/driver
+	Thread.sleep(60000);	
+	driver.quit();
+
+	}
+
+}
